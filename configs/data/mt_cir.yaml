@@ -1,0 +1,12 @@
+# @package data
+
+name: mt_cir
+root: ${paths.data_root}/mt_cir
+max_samples: null
+
+image_size: 224
+batch_size: 32
+num_workers: 8
+
+max_text_len: 64
+text_dropout: 0.0

@@ -1,0 +1,13 @@
+# @package trainer
+
+stage: pretrain
+accelerator: gpu
+devices: 1
+max_epochs: 3
+precision: bf16-mixed
+accumulate_grad_batches: 1
+gradient_clip_val: 1.0
+
+unfreeze_text_at_epoch: 0
+unfreeze_vision_at_epoch: -1
+check_val_every_n_epoch: 1

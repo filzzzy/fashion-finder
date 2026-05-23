@@ -1,0 +1,114 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# uv
+.uv/
+
+# Hydra / training outputs
+outputs/
+multirun/
+mlruns/
+mlartifacts/
+wandb/
+lightning_logs/
+tb_logs/
+
+# Model artifacts (use DVC instead)
+*.ckpt
+*.pth
+*.pt
+*.onnx
+*.plan
+*.engine
+*.trt
+
+# Data artifacts (use DVC instead)
+*.csv
+*.json
+*.jsonl
+*.h5
+*.parquet
+*.npy
+*.npz
+*.feather
+!recall_template.json
+!fashion_finder/**/*.json
+
+# DVC local storage
+.dvc/cache/
+.dvc/tmp/
+.dvc/storage_data/
+.dvc/storage_models/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Plots from training
+plots/*.png
+plots/*.jpg
+!plots/.gitkeep
+
+# Local secrets
+*.env.local
+secrets/

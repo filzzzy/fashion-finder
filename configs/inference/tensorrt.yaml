@@ -1,0 +1,12 @@
+# @package inference
+
+backend: tensorrt
+checkpoint_path: ${paths.checkpoints_root}/final_model.ckpt
+output_dir: ${paths.checkpoints_root}/tensorrt
+vision_filename: fashion_finder_vision.plan
+composer_filename: fashion_finder_composer.plan
+precision: fp16
+workspace_mb: 4096
+min_batch: 1
+opt_batch: 16
+max_batch: 64

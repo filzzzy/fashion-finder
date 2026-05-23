@@ -1,0 +1,26 @@
+# @package _global_
+
+defaults:
+  - data: fashion_iq
+  - model: collm
+  - trainer: finetune
+  - logging: mlflow
+  - inference: onnx
+  - _self_
+
+seed: 42
+project_name: fashion-finder
+
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+  job:
+    chdir: true
+
+paths:
+  data_root: ${oc.env:DATA_ROOT,${hydra:runtime.cwd}/data}
+  checkpoints_root: ${oc.env:MODELS_ROOT,${hydra:runtime.cwd}/checkpoints}
+  resume_from: null

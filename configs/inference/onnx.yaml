@@ -1,0 +1,14 @@
+# @package inference
+
+backend: onnx
+checkpoint_path: ${paths.checkpoints_root}/final_model.ckpt
+output_dir: ${paths.checkpoints_root}/onnx
+vision_filename: fashion_finder_vision.onnx
+composer_filename: fashion_finder_composer.onnx
+opset: 17
+dynamic_batch: true
+faiss:
+  index_type: HNSW32
+  ef_construction: 200
+  ef_search: 64
+  top_k: 50

@@ -1,0 +1,21 @@
+# @package model
+
+vision_arch: vit_base_patch16_clip_224.openai
+text_arch: Salesforce/SFR-Embedding-2_R
+embed_dim: 4096
+use_lora: true
+lora_r: 16
+lora_alpha: 16
+lora_dropout: 0.1
+
+loss: cross-entropy
+initial_logit_scale: 2.6592
+initial_logit_bias: 0.0
+
+learning_rate: 1.0e-4
+weight_decay: 0.05
+warmup_steps: 320
+backbone_lr_scale_after_unfreeze: 1.0
+
+vocab_size: -1
+img_token_id: -1

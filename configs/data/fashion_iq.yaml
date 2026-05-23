@@ -1,0 +1,14 @@
+# @package data
+
+name: fashion_iq
+root: ${paths.data_root}/fashion_iq
+categories: [dress, shirt, toptee]
+train_split: train
+val_split: val
+
+image_size: 224
+batch_size: 32
+num_workers: 8
+
+max_text_len: 64
+text_dropout: 0.0

@@ -1,0 +1,37 @@
+name: "fashion_finder_composer"
+platform: "onnxruntime_onnx"
+max_batch_size: 64
+input [
+  {
+    name: "images"
+    data_type: TYPE_FP32
+    dims: [3, 224, 224]
+  },
+  {
+    name: "input_ids"
+    data_type: TYPE_INT64
+    dims: [64]
+  },
+  {
+    name: "attention_mask"
+    data_type: TYPE_INT64
+    dims: [64]
+  }
+]
+output [
+  {
+    name: "embedding"
+    data_type: TYPE_FP32
+    dims: [4096]
+  }
+]
+instance_group [
+  {
+    count: 1
+    kind: KIND_AUTO
+  }
+]
+dynamic_batching {
+  preferred_batch_size: [2, 4, 8]
+  max_queue_delay_microseconds: 5000
+}
