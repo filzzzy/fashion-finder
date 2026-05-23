@@ -6,7 +6,6 @@ from pathlib import Path
 import requests
 from tqdm import tqdm
 
-
 FASHION_IQ_RAW_BASE = "https://raw.githubusercontent.com/XiaoxiaoGuo/fashion-iq/master/captions"
 FASHION_IQ_SPLITS = ("train", "val", "test")
 FASHION_IQ_CATEGORIES = ("dress", "shirt", "toptee")

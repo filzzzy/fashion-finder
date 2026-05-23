@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Photo Search by Text Hint — Composed Image Retrieval over fashion catalogues"
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
-authors = [{ name = "Elizaveta Finenko", email = "elis.finenko@gmail.com" }]
+authors = [{ name = "Elizaveta Finenko", email = "finenko.ea@phystech.edu" }]
 license = { text = "MIT" }
 
 dependencies = [
@@ -95,4 +95,3 @@ indent-style = "space"
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-ra -q --strict-markers"
-

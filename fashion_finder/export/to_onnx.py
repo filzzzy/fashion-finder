@@ -44,9 +44,7 @@ def export_onnx(cfg: DictConfig) -> dict[str, str]:
     output_dir = Path(cfg.inference.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    module = CompositionLitModule.load_from_checkpoint(
-        str(checkpoint_path), cfg=cfg, strict=False
-    )
+    module = CompositionLitModule.load_from_checkpoint(str(checkpoint_path), cfg=cfg, strict=False)
     module.eval()
     module.cpu()
 
@@ -75,9 +73,7 @@ def export_onnx(cfg: DictConfig) -> dict[str, str]:
     composer = ComposerEmbedder(module).eval()
 
     dynamic_axes_vision = (
-        {"images": {0: "batch"}, "embedding": {0: "batch"}}
-        if cfg.inference.dynamic_batch
-        else None
+        {"images": {0: "batch"}, "embedding": {0: "batch"}} if cfg.inference.dynamic_batch else None
     )
     dynamic_axes_composer = (
         {

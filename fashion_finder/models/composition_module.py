@@ -13,7 +13,6 @@ from omegaconf import DictConfig
 from fashion_finder.models.architecture import CoLLMArchitecture
 from fashion_finder.utils.visualization import make_retrieval_grid
 
-
 RECALL_KS = (1, 5, 10, 50)
 
 

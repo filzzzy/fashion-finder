@@ -10,7 +10,8 @@ from pytorch_lightning.loggers import MLFlowLogger, TensorBoardLogger
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
 
-from fashion_finder.data.fashion_iq import FashionIQDataset, collate as fiq_collate
+from fashion_finder.data.fashion_iq import FashionIQDataset
+from fashion_finder.data.fashion_iq import collate as fiq_collate
 from fashion_finder.data.mt_cir import MTCIRDataset, collate_skip_missing
 from fashion_finder.data.transforms import build_eval_transform, build_train_transform
 from fashion_finder.models.composition_module import CompositionLitModule
@@ -134,9 +135,7 @@ def train(cfg: DictConfig) -> dict:
     checkpoint_callback = ModelCheckpoint(
         dirpath=str(checkpoint_dir),
         filename=(
-            "final_model"
-            if not monitor
-            else "epoch{epoch:02d}-mean_recall{val/mean_recall:.3f}"
+            "final_model" if not monitor else "epoch{epoch:02d}-mean_recall{val/mean_recall:.3f}"
         ),
         save_top_k=1,
         monitor=monitor,

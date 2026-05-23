@@ -26,9 +26,7 @@ def make_retrieval_grid(
     for idx in range(source_imgs.shape[0]):
         source = torchvision.transforms.ToPILImage()(source_imgs[idx])
         target = torchvision.transforms.ToPILImage()(target_imgs[idx])
-        tops = [
-            torchvision.transforms.ToPILImage()(retrieved_imgs[idx, k]) for k in range(n_top)
-        ]
+        tops = [torchvision.transforms.ToPILImage()(retrieved_imgs[idx, k]) for k in range(n_top)]
         width, height = source.size
         gap = 15
         canvas_w = width * (3 + n_top) + gap * (2 + n_top)
@@ -54,9 +52,7 @@ def make_retrieval_grid(
 
         target_x = (width + gap) * 2
         canvas.paste(target, (target_x, 0))
-        draw.rectangle(
-            [target_x, 0, target_x + width, height], outline=(0, 200, 0), width=3
-        )
+        draw.rectangle([target_x, 0, target_x + width, height], outline=(0, 200, 0), width=3)
         draw.text((target_x, height + 2), "TARGET (GT)", fill=(0, 150, 0))
 
         start_tops_x = (width + gap) * 3

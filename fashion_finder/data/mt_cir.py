@@ -9,7 +9,6 @@ import torch
 from PIL import Image
 from torch.utils.data import Dataset
 
-
 IMG_TOKEN = "<image>"
 PROMPT_TEMPLATE = (
     "Instruct: Find the image that matches the query.\n"

@@ -12,10 +12,8 @@ from transformers import AutoTokenizer
 
 from fashion_finder.data.transforms import build_eval_transform
 
-
 PROMPT_TEMPLATE = (
-    "Instruct: Find the image that matches the query.\n"
-    "Query:\nImage: <image>\nText: {text}"
+    "Instruct: Find the image that matches the query.\n" "Query:\nImage: <image>\nText: {text}"
 )
 
 
@@ -26,9 +24,7 @@ def _load_session(onnx_path: str | Path) -> ort.InferenceSession:
     return ort.InferenceSession(str(onnx_path), providers=providers)
 
 
-def _embed_image(
-    session: ort.InferenceSession, transform, image_path: Path
-) -> np.ndarray:
+def _embed_image(session: ort.InferenceSession, transform, image_path: Path) -> np.ndarray:
     image = Image.open(image_path).convert("RGB")
     tensor = transform(image).unsqueeze(0).numpy().astype(np.float32)
     outputs = session.run(None, {"images": tensor})
@@ -48,7 +44,11 @@ def build_gallery_index(
 
     gallery_root = Path(gallery_dir)
     image_paths = sorted(
-        [path for path in gallery_root.rglob("*") if path.suffix.lower() in {".jpg", ".png", ".jpeg"}]
+        [
+            path
+            for path in gallery_root.rglob("*")
+            if path.suffix.lower() in {".jpg", ".png", ".jpeg"}
+        ]
     )
     if not image_paths:
         raise ValueError(f"No images found under {gallery_root}")

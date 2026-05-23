@@ -27,8 +27,7 @@ def _prepare_text(
         tokenizer.add_special_tokens({"pad_token": tokenizer.eos_token})
     tokenizer.add_special_tokens({"additional_special_tokens": ["<image>"]})
     prompt = (
-        "Instruct: Find the image that matches the query.\n"
-        f"Query:\nImage: <image>\nText: {text}"
+        "Instruct: Find the image that matches the query.\n" f"Query:\nImage: <image>\nText: {text}"
     )
     encoded = tokenizer(
         prompt,

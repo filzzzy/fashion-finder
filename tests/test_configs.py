@@ -4,7 +4,6 @@ from pathlib import Path
 
 from hydra import compose, initialize_config_dir
 
-
 CONFIG_DIR = (Path(__file__).resolve().parents[1] / "configs").as_posix()
 
 

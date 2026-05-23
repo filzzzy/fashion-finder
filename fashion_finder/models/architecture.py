@@ -34,9 +34,7 @@ class CoLLMArchitecture(nn.Module):
         lora_dropout: float = 0.1,
     ) -> None:
         super().__init__()
-        self.vision_encoder = timm.create_model(
-            vision_arch, pretrained=True, num_classes=0
-        )
+        self.vision_encoder = timm.create_model(vision_arch, pretrained=True, num_classes=0)
         vision_dim = self.vision_encoder.num_features
 
         self.llm = AutoModelForCausalLM.from_pretrained(

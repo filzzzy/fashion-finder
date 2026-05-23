@@ -5,16 +5,16 @@ from pathlib import Path
 
 import fire
 from hydra import compose, initialize_config_dir
+from omegaconf import DictConfig
 
 from fashion_finder.data.download import download_all
 from fashion_finder.export.to_onnx import export_onnx as run_export_onnx
 from fashion_finder.train.train import train as run_train
 
-
 CONFIG_DIR = (Path(__file__).resolve().parents[1] / "configs").as_posix()
 
 
-def _compose(config_name: str, overrides: list[str]) -> "DictConfig":
+def _compose(config_name: str, overrides: list[str]) -> DictConfig:
     with initialize_config_dir(version_base="1.3", config_dir=CONFIG_DIR):
         cfg = compose(config_name=config_name, overrides=overrides)
     return cfg
