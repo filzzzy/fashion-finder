@@ -1,0 +1,6 @@
+outs:
+- md5: 4d1b4b7d5bf3e98bd8f2520f6d71a058.dir
+  size: 1993890965
+  nfiles: 4
+  hash: md5
+  path: mt_cir

@@ -1,0 +1,6 @@
+outs:
+- md5: c31f1d4e161622b03bb6f99468713087.dir
+  size: 68084888
+  nfiles: 37734
+  hash: md5
+  path: fashion_iq

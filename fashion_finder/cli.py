@@ -55,8 +55,13 @@ def export_onnx(checkpoint: str, **overrides) -> None:
 def download_data(
     root: str = "data",
     mt_cir_max_samples: int | None = None,
+    use_placeholders: bool = False,
 ) -> None:
-    download_all(Path(root), mt_cir_max_samples=mt_cir_max_samples)
+    download_all(
+        Path(root),
+        mt_cir_max_samples=mt_cir_max_samples,
+        use_placeholders=use_placeholders,
+    )
     print(f"Datasets ready at {root}")
 
 
