@@ -34,17 +34,26 @@ class FashionIQDataset(Dataset):
 
         self.samples: list[dict[str, Any]] = []
         captions_dir = self.root / "captions"
+        images_dir = self.root / "images"
         for category in categories:
             cap_path = captions_dir / f"cap.{category}.{split}.json"
             if not cap_path.exists():
                 continue
             data = json.loads(cap_path.read_text())
             for entry in data:
+                candidate = entry.get("candidate")
+                target = entry.get("target")
+                if not candidate or not target:
+                    continue
+                if not (images_dir / f"{candidate}.jpg").exists():
+                    continue
+                if not (images_dir / f"{target}.jpg").exists():
+                    continue
                 self.samples.append(
                     {
-                        "candidate": entry["candidate"],
-                        "target": entry["target"],
-                        "captions": entry["captions"],
+                        "candidate": candidate,
+                        "target": target,
+                        "captions": entry.get("captions", []),
                         "category": category,
                     }
                 )

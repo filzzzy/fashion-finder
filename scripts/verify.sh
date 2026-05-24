@@ -17,11 +17,12 @@ uv run pre-commit run --all-files
 echo "[3/6] pytest"
 uv run pytest -q
 
-echo "[4/6] download-data (MT-CIR 500 samples + Fashion-IQ placeholders)"
+echo "[4/6] download-data (MT-CIR 500 rows + real Fashion-IQ subset, 30 entries per split)"
 uv run fashion-finder download-data \
     --root data \
     --mt-cir-max-samples 500 \
-    --use-placeholders
+    --max-per-split 30 \
+    --fill-missing False
 
 echo "[5/6] mlflow server (background) on http://127.0.0.1:8080"
 uv run mlflow server \
