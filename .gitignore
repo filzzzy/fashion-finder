@@ -104,10 +104,11 @@ tb_logs/
 .DS_Store
 Thumbs.db
 
-# Plots from training
-plots/*.png
-plots/*.jpg
-!plots/.gitkeep
+# Local stray artifacts produced by Lightning/MLflow at repo root
+code_backup/
+mlflow.db
+mlflow.db-journal
+resolved_config.yaml
 
 # Local secrets
 *.env.local
