@@ -1,8 +1,24 @@
 # Fashion-Finder
 
 **Project name:** Fashion-Finder — Photo Search by Text Hint
-**Author:** Elizaveta Finenko ([elis.finenko@gmail.com](mailto:elis.finenko@gmail.com))
+**Author:** Elizaveta Finenko ([finenko.ea@phystech.edu](mailto:finenko.ea@phystech.edu))
 **Course:** MIPT MLOps, Spring 2026
+
+---
+
+## Быстрая проверка
+
+```bash
+git clone https://github.com/filzzzy/fashion-finder.git
+cd fashion-finder
+bash scripts/verify.sh
+```
+
+Скрипт ставит `uv` (если его нет), синкает зависимости, прогоняет pre-commit и pytest, качает данные и запускает smoke-тренировку на 150 шагов. На M-маке занимает 5–8 минут.
+
+Чекпоинт окажется в `checkpoints/`, графики уже лежат в `plots/`, MLflow поднимется на http://127.0.0.1:8080.
+
+Отдельные шаги — в [Setup](#setup), [Train](#train), [Infer](#infer), [Production preparation](#production-preparation).
 
 ---
 
