@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import requests
@@ -28,7 +29,9 @@ def download_fashion_iq_captions(target_dir: Path) -> Path:
     return target_dir
 
 
-FASHION_IQ_URL_BASE = "https://raw.githubusercontent.com/XiaoxiaoGuo/fashion-iq/master/image_url"
+FASHION_IQ_URL_BASE = (
+    "https://raw.githubusercontent.com/hongwang600/fashion-iq-metadata/master/image_url"
+)
 
 
 def _load_asin_to_url(captions_dir: Path, category: str) -> dict[str, str]:
@@ -50,9 +53,27 @@ def _load_asin_to_url(captions_dir: Path, category: str) -> dict[str, str]:
     return mapping
 
 
-def download_fashion_iq_images(captions_dir: Path, images_dir: Path) -> Path:
+def _fetch_one(url: str, out_path: Path, timeout: int = 10) -> str:
+    try:
+        response = requests.get(url, timeout=timeout)
+        response.raise_for_status()
+        out_path.write_bytes(response.content)
+        return "downloaded"
+    except (requests.RequestException, OSError):
+        return "failed"
+
+
+def download_fashion_iq_images(
+    captions_dir: Path,
+    images_dir: Path,
+    max_workers: int = 32,
+    max_per_split: int | None = None,
+) -> dict[str, int]:
     images_dir.mkdir(parents=True, exist_ok=True)
     seen: set[str] = set()
+    stats = {"requested": 0, "downloaded": 0, "missing_url": 0, "failed": 0, "cached": 0}
+    download_jobs: list[tuple[str, Path]] = []
+
     for category in FASHION_IQ_CATEGORIES:
         asin_to_url = _load_asin_to_url(captions_dir, category)
         for split in FASHION_IQ_SPLITS:
@@ -60,25 +81,39 @@ def download_fashion_iq_images(captions_dir: Path, images_dir: Path) -> Path:
             if not cap_path.exists():
                 continue
             data = json.loads(cap_path.read_text())
-            for entry in tqdm(data, desc=f"images {category}/{split}"):
+            if max_per_split is not None:
+                data = data[:max_per_split]
+            for entry in data:
                 image_ids = [entry.get(key) for key in ("candidate", "target") if key in entry]
                 for image_id in image_ids:
                     if not image_id or image_id in seen:
                         continue
                     seen.add(image_id)
+                    stats["requested"] += 1
                     out_path = images_dir / f"{image_id}.jpg"
-                    if out_path.exists():
+                    if out_path.exists() and out_path.stat().st_size > 1024:
+                        stats["cached"] += 1
                         continue
                     url = asin_to_url.get(image_id)
                     if not url:
+                        stats["missing_url"] += 1
                         continue
-                    try:
-                        response = requests.get(url, timeout=15)
-                        response.raise_for_status()
-                        out_path.write_bytes(response.content)
-                    except (requests.RequestException, OSError):
-                        continue
-    return images_dir
+                    download_jobs.append((url, out_path))
+
+    if download_jobs:
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {
+                executor.submit(_fetch_one, url, path): (url, path) for url, path in download_jobs
+            }
+            for future in tqdm(as_completed(futures), total=len(futures), desc="image downloads"):
+                stats[future.result()] += 1
+
+    print(
+        f"Fashion-IQ image crawl: requested={stats['requested']}, "
+        f"downloaded={stats['downloaded']}, cached={stats['cached']}, "
+        f"missing_url={stats['missing_url']}, failed={stats['failed']}"
+    )
+    return stats
 
 
 def download_mt_cir(target_dir: Path, max_samples: int | None = None) -> Path:
@@ -150,20 +185,25 @@ def download_all(
     root: Path,
     mt_cir_max_samples: int | None = None,
     use_placeholders: bool = False,
+    fill_missing: bool = True,
+    max_per_split: int | None = None,
 ) -> None:
     root.mkdir(parents=True, exist_ok=True)
     mt_cir_dir = root / "mt_cir"
     fashion_iq_dir = root / "fashion_iq"
+    captions_dir = fashion_iq_dir / "captions"
+    images_dir = fashion_iq_dir / "images"
+
     download_mt_cir(mt_cir_dir, max_samples=mt_cir_max_samples)
-    download_fashion_iq_captions(fashion_iq_dir / "captions")
+    download_fashion_iq_captions(captions_dir)
+
     if use_placeholders:
-        created = generate_placeholder_images(
-            captions_dir=fashion_iq_dir / "captions",
-            images_dir=fashion_iq_dir / "images",
-        )
+        created = generate_placeholder_images(captions_dir, images_dir)
         print(f"Generated {created} placeholder images")
-    else:
-        download_fashion_iq_images(
-            captions_dir=fashion_iq_dir / "captions",
-            images_dir=fashion_iq_dir / "images",
-        )
+        return
+
+    download_fashion_iq_images(captions_dir, images_dir, max_per_split=max_per_split)
+    if fill_missing:
+        added = generate_placeholder_images(captions_dir, images_dir)
+        if added:
+            print(f"Filled {added} missing images with placeholders")

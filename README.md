@@ -68,7 +68,7 @@ API: HTTP через Triton Inference Server (порт 8000) либо CLI (`infe
 
 ### Основная модель: CoLLM
 
-Архитектура построена по схеме [CoLLM (Pham et al., 2024)](https://arxiv.org/abs/2403.15797): vision encoder + LLM с LoRA-адаптерами, объединённые через image adapter.
+Архитектура построена по схеме [CoLLM: A Large Language Model for Composed Image Retrieval (Huynh et al., 2025)](https://arxiv.org/abs/2503.19910): vision encoder + LLM с LoRA-адаптерами, объединённые через image adapter.
 
 ```mermaid
 flowchart LR

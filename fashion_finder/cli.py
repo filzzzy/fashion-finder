@@ -61,11 +61,15 @@ def download_data(
     root: str = "data",
     mt_cir_max_samples: int | None = None,
     use_placeholders: bool = False,
+    fill_missing: bool = True,
+    max_per_split: int | None = None,
 ) -> None:
     download_all(
         Path(root),
         mt_cir_max_samples=mt_cir_max_samples,
         use_placeholders=use_placeholders,
+        fill_missing=fill_missing,
+        max_per_split=max_per_split,
     )
     print(f"Datasets ready at {root}")
 
