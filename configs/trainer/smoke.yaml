@@ -1,14 +1,14 @@
 # @package trainer
 
-stage: finetune
+stage: smoke
 accelerator: auto
 devices: 1
-max_epochs: 3
+max_epochs: 1
 precision: 32
 accumulate_grad_batches: 1
 gradient_clip_val: 1.0
-limit_train_batches: 1.0
-limit_val_batches: 1.0
+limit_train_batches: 150
+limit_val_batches: 30
 
 unfreeze_text_at_epoch: 0
 unfreeze_vision_at_epoch: 11

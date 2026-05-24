@@ -15,37 +15,42 @@ CONFIG_DIR = (Path(__file__).resolve().parents[1] / "configs").as_posix()
 
 
 def _compose(config_name: str, overrides: list[str]) -> DictConfig:
+    project_root = Path.cwd().resolve()
+    path_overrides = [
+        f"paths.data_root={project_root / 'data'}",
+        f"paths.checkpoints_root={project_root / 'checkpoints'}",
+    ]
     with initialize_config_dir(version_base="1.3", config_dir=CONFIG_DIR):
-        cfg = compose(config_name=config_name, overrides=overrides)
+        cfg = compose(config_name=config_name, overrides=[*path_overrides, *overrides])
     return cfg
 
 
-def pretrain(**overrides) -> None:
-    override_list = [
-        "data=mt_cir",
-        "trainer=pretrain",
-        *[f"{key}={value}" for key, value in overrides.items()],
-    ]
+def _split_overrides(overrides: str) -> list[str]:
+    return [token for token in overrides.split() if token]
+
+
+def pretrain(overrides: str = "") -> None:
+    override_list = ["data=mt_cir", "trainer=pretrain", *_split_overrides(overrides)]
     cfg = _compose("config", override_list)
     summary = run_train(cfg)
     print(json.dumps(summary, indent=2))
 
 
-def finetune(checkpoint: str | None = None, **overrides) -> None:
+def finetune(checkpoint: str | None = None, overrides: str = "") -> None:
     override_list = ["data=fashion_iq", "trainer=finetune"]
     if checkpoint:
         override_list.append(f"paths.resume_from={checkpoint}")
-    override_list.extend(f"{key}={value}" for key, value in overrides.items())
+    override_list.extend(_split_overrides(overrides))
     cfg = _compose("config", override_list)
     summary = run_train(cfg)
     print(json.dumps(summary, indent=2))
 
 
-def export_onnx(checkpoint: str, **overrides) -> None:
+def export_onnx(checkpoint: str, overrides: str = "") -> None:
     override_list = [
         "inference=onnx",
         f"inference.checkpoint_path={checkpoint}",
-        *[f"{key}={value}" for key, value in overrides.items()],
+        *_split_overrides(overrides),
     ]
     cfg = _compose("config", override_list)
     paths = run_export_onnx(cfg)

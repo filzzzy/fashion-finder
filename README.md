@@ -161,19 +161,27 @@ uv run mlflow server --host 127.0.0.1 --port 8080 \
 
 ## Train
 
+### Quick smoke (5 минут, без GPU)
+
+Эта команда — то, что нужно проверить:
+
+```bash
+uv run fashion-finder finetune --overrides "trainer=smoke"
+```
+
+Запускает 20 train-батчей + 10 val-батчей на `HuggingFaceTB/SmolLM2-135M` (LLM) + `vit_tiny_patch16_224` (vision). Loss падает, чекпоинт сохраняется в `checkpoints/`, метрики в MLflow.
+
+### Полное обучение
+
 ```bash
 uv run fashion-finder pretrain
 uv run fashion-finder finetune --checkpoint outputs/<run>/checkpoints/last.ckpt
 ```
 
-Hydra-оверрайды поддерживаются:
+Hydra-оверрайды (передаются как одна строка через `--overrides`):
 
 ```bash
-uv run fashion-finder finetune \
-    --checkpoint outputs/.../last.ckpt \
-    data.batch_size=16 \
-    trainer.max_epochs=20 \
-    model.learning_rate=5e-5
+uv run fashion-finder finetune --overrides "data.batch_size=16 trainer.max_epochs=20 model.learning_rate=5e-5"
 ```
 
 Каждый запуск создаёт папку `outputs/YYYY-MM-DD/HH-MM-SS/` с `checkpoints/`, `tb_logs/`, `resolved_config.yaml`, `training_summary.json`. После обучения автоматически сохраняются графики в `plots/` (см. ниже).

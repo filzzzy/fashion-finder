@@ -157,6 +157,8 @@ def train(cfg: DictConfig) -> dict:
         precision=cfg.trainer.precision,
         accumulate_grad_batches=cfg.trainer.accumulate_grad_batches,
         gradient_clip_val=cfg.trainer.gradient_clip_val,
+        limit_train_batches=cfg.trainer.get("limit_train_batches", 1.0),
+        limit_val_batches=cfg.trainer.get("limit_val_batches", 1.0),
         logger=loggers,
         callbacks=callbacks,
         log_every_n_steps=cfg.logging.log_every_n_steps,

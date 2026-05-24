@@ -3,7 +3,7 @@
 mlflow_tracking_uri: http://127.0.0.1:8080
 experiment_name: fashion-finder
 run_name: null
-log_every_n_steps: 50
+log_every_n_steps: 5
 tensorboard:
   enabled: true
   save_dir: tb_logs

@@ -112,3 +112,5 @@ plots/*.jpg
 # Local secrets
 *.env.local
 secrets/
+
+.dvc/.dvc/

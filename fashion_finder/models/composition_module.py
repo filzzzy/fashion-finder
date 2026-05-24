@@ -60,7 +60,9 @@ class CompositionLitModule(pl.LightningModule):
         self.log("train/logit_scale", self.model.logit_scale.exp(), on_step=True)
         return loss
 
-    def validation_step(self, batch: dict[str, Any], batch_idx: int) -> dict[str, Any]:
+    def validation_step(
+        self, batch: dict[str, Any], batch_idx: int, dataloader_idx: int = 0
+    ) -> dict[str, Any]:
         composed = self._compose(batch["image1"], batch["input_ids"], batch["attention_mask"])
         target = self.model.get_target_embedding(batch["image2"])
 

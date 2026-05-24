@@ -37,9 +37,7 @@ class CoLLMArchitecture(nn.Module):
         self.vision_encoder = timm.create_model(vision_arch, pretrained=True, num_classes=0)
         vision_dim = self.vision_encoder.num_features
 
-        self.llm = AutoModelForCausalLM.from_pretrained(
-            llm_arch, torch_dtype=torch.float16, device_map=None
-        )
+        self.llm = AutoModelForCausalLM.from_pretrained(llm_arch, device_map=None)
         llm_dim = self.llm.config.hidden_size
         self.llm.resize_token_embeddings(vocab_size)
 

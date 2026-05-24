@@ -21,6 +21,6 @@ hydra:
     chdir: true
 
 paths:
-  data_root: ${oc.env:DATA_ROOT,${hydra:runtime.cwd}/data}
-  checkpoints_root: ${oc.env:MODELS_ROOT,${hydra:runtime.cwd}/checkpoints}
+  data_root: data
+  checkpoints_root: checkpoints
   resume_from: null
